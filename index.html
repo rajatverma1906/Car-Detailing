@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Car Detailing</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Custom CSS -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fade-in 0.6s ease-out forwards;
+        }
+        
+        @keyframes slow-zoom {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+        .animate-slow-zoom {
+            animation: slow-zoom 20s infinite alternate linear;
+        }
+
+        .faq-content {
+            transition: max-height 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 transition-colors duration-300 font-sans selection:bg-amber-500/30 selection:text-amber-900 dark:selection:text-amber-200">
+
+    <!-- NAVIGATION -->
+    <nav id="main-nav" class="fixed w-full z-50 transition-all duration-300 bg-transparent py-5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center cursor-pointer group" onclick="setView('home')">
+                    <i data-lucide="shield" class="w-8 h-8 text-amber-500 mr-2 transform group-hover:rotate-12 transition-transform"></i>
+                    <span id="logo-text" class="biz-logo-text text-xl font-black tracking-wider uppercase text-white transition-colors">
+                        <!-- Filled by JS -->
+                    </span>
+                </div>
+
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <button class="nav-link text-sm font-semibold uppercase tracking-wider transition-colors hover:text-amber-500" data-target="home" onclick="setView('home')">Home</button>
+                    <button class="nav-link text-sm font-semibold uppercase tracking-wider transition-colors hover:text-amber-500" data-target="about" onclick="setView('about')">About Us</button>
+                    <button class="nav-link text-sm font-semibold uppercase tracking-wider transition-colors hover:text-amber-500" data-target="services" onclick="setView('services')">Services</button>
+                    <button class="nav-link text-sm font-semibold uppercase tracking-wider transition-colors hover:text-amber-500" data-target="gallery" onclick="setView('gallery')">Gallery</button>
+                    <button class="nav-link text-sm font-semibold uppercase tracking-wider transition-colors hover:text-amber-500" data-target="contact" onclick="setView('contact')">Contact</button>
+                    
+                    <div class="flex items-center space-x-4 border-l dark:border-zinc-800 border-zinc-300 pl-6 transition-colors">
+                        <button onclick="setView('contact')" class="inline-flex items-center justify-center py-2 px-4 font-medium transition-all duration-300 rounded-xl bg-amber-500 text-zinc-950 hover:bg-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.3)] hover:shadow-[0_0_25px_rgba(245,158,11,0.5)] text-sm">
+                            Book Now
+                        </button>
+                        
+                        <!-- Theme Toggle Button -->
+                        <button onclick="toggleTheme()" class="nav-icon-btn p-2 rounded-full transition-colors" aria-label="Toggle Theme">
+                            <span class="theme-icon-sun hidden"><i data-lucide="sun" class="w-5 h-5"></i></span>
+                            <span class="theme-icon-moon"><i data-lucide="moon" class="w-5 h-5"></i></span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Actions -->
+                <div class="md:hidden flex items-center space-x-4">
+                    <button onclick="toggleTheme()" class="nav-icon-btn p-2 rounded-full transition-colors">
+                        <span class="theme-icon-sun hidden"><i data-lucide="sun" class="w-5 h-5"></i></span>
+                        <span class="theme-icon-moon"><i data-lucide="moon" class="w-5 h-5"></i></span>
+                    </button>
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="transition-colors hover:text-amber-500 text-white">
+                        <span id="mobile-menu-icon"><i data-lucide="menu" class="w-8 h-8"></i></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Overlay -->
+        <div id="mobile-menu" class="hidden absolute top-full left-0 w-full dark:bg-zinc-950 bg-white border-b dark:border-zinc-800 border-zinc-200 shadow-2xl animate-fade-in transition-colors">
+            <div class="flex flex-col px-4 py-6 space-y-4">
+                <button class="nav-link-mobile text-left text-lg font-bold uppercase tracking-wider py-2 transition-colors" data-target="home" onclick="setView('home')">Home</button>
+                <button class="nav-link-mobile text-left text-lg font-bold uppercase tracking-wider py-2 transition-colors" data-target="about" onclick="setView('about')">About Us</button>
+                <button class="nav-link-mobile text-left text-lg font-bold uppercase tracking-wider py-2 transition-colors" data-target="services" onclick="setView('services')">Services</button>
+                <button class="nav-link-mobile text-left text-lg font-bold uppercase tracking-wider py-2 transition-colors" data-target="gallery" onclick="setView('gallery')">Gallery</button>
+                <button class="nav-link-mobile text-left text-lg font-bold uppercase tracking-wider py-2 transition-colors" data-target="contact" onclick="setView('contact')">Contact</button>
+                
+                <div class="pt-4 border-t dark:border-zinc-800 border-zinc-200 flex flex-col gap-3 transition-colors">
+                    <button onclick="setView('contact')" class="w-full inline-flex items-center justify-center px-6 py-3 font-medium transition-all duration-300 rounded-xl bg-amber-500 text-zinc-950 hover:bg-amber-400">Book Now</button>
+                    <button class="w-full inline-flex items-center justify-center px-6 py-3 font-medium transition-all duration-300 rounded-xl bg-emerald-600 text-white hover:bg-emerald-500">
+                        <i data-lucide="message-circle" class="w-5 h-5 mr-2"></i> WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        
+        <!-- HOME PAGE -->
+        <div id="view-home" class="page-view animate-fade-in">
+            <!-- Hero -->
+            <section class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
+                <div class="absolute inset-0 z-0">
+                    <img src="https://images.unsplash.com/photo-1605515298946-d062f2e9da53?auto=format&fit=crop&q=80&w=2000" alt="Luxury Car Detailing" class="w-full h-full object-cover object-center scale-105 animate-slow-zoom"/>
+                    <div class="absolute inset-0 bg-gradient-to-r from-zinc-950/90 via-zinc-950/70 to-zinc-950/40"></div>
+                </div>
+                <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center md:text-left pt-20">
+                    <span class="inline-block py-1 px-3 border border-amber-500/50 text-amber-500 bg-amber-500/10 backdrop-blur-sm rounded-full text-sm font-semibold tracking-wider mb-6">Premium Car Care in Qatar</span>
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-6">
+                        Redefining <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">Luxury</span><br /> Car Detailing
+                    </h1>
+                    <p class="text-lg md:text-xl text-zinc-300 max-w-2xl mb-10 md:mx-0 mx-auto">Experience unparalleled automotive perfection. From advanced ceramic coatings to meticulous interior restoration, we protect and perfect your investment.</p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                        <button onclick="setView('contact')" class="inline-flex items-center justify-center px-6 py-3 font-medium transition-all duration-300 rounded-xl bg-amber-500 text-zinc-950 hover:bg-amber-400">
+                            Book Appointment <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Services Overview -->
+            <section class="py-20 dark:bg-zinc-950 bg-zinc-50 transition-colors duration-300">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="mb-12 text-center">
+                        <span id="services" class="text-amber-500 font-bold tracking-widest uppercase text-sm mb-3 block">Our Services</span>
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold dark:text-white text-zinc-900 mb-4 transition-colors">Automotive Perfection</h2>
+                        <div class="h-1 w-20 bg-amber-500 mx-auto"></div>
+                    </div>
+                    <div id="home-services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Highlights -->
+            <section class="py-20 dark:bg-zinc-900 bg-white relative overflow-hidden transition-colors duration-300">
+                <div class="absolute top-0 right-0 w-1/2 h-full bg-amber-500/5 blur-[150px] rounded-full pointer-events-none"></div>
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="flex flex-col lg:flex-row items-center gap-12">
+                        <div class="lg:w-1/2">
+                            <img src="https://i.ibb.co/zTKKg7rq/Why-Choose-Us.webp" alt="Professional Polishing" class="w-full h-auto rounded-2xl shadow-2xl border dark:border-zinc-800 border-zinc-200"/>
+                        </div>
+                        <div class="lg:w-1/2">
+                            <div class="mb-12 text-left">
+                                <span class="text-amber-500 font-bold tracking-widest uppercase text-sm mb-3 block">Premium Care</span>
+                                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold dark:text-white text-zinc-900 mb-4 transition-colors">Why Choose Us?</h2>
+                                <div class="h-1 w-20 bg-amber-500"></div>
+                            </div>
+                            <p class="dark:text-zinc-300 text-zinc-600 text-lg mb-6 leading-relaxed transition-colors">
+                                At <span class="biz-name"></span>, we don't just wash cars; we elevate them. We use world-class detailing products, state-of-the-art equipment, and proven techniques to ensure your vehicle looks better than the day it left the showroom.
+                            </p>
+                            <ul class="space-y-4 mb-8">
+                                <li class="flex items-center dark:text-zinc-300 text-zinc-600 transition-colors"><i data-lucide="check-circle" class="text-amber-500 w-5 h-5 mr-3 flex-shrink-0"></i> <span>Certified Professional Detailers</span></li>
+                                <li class="flex items-center dark:text-zinc-300 text-zinc-600 transition-colors"><i data-lucide="check-circle" class="text-amber-500 w-5 h-5 mr-3 flex-shrink-0"></i> <span>Premium Global Brand Products</span></li>
+                                <li class="flex items-center dark:text-zinc-300 text-zinc-600 transition-colors"><i data-lucide="check-circle" class="text-amber-500 w-5 h-5 mr-3 flex-shrink-0"></i> <span>Climate-Controlled Facility</span></li>
+                                <li class="flex items-center dark:text-zinc-300 text-zinc-600 transition-colors"><i data-lucide="check-circle" class="text-amber-500 w-5 h-5 mr-3 flex-shrink-0"></i> <span>Satisfaction Guarantee</span></li>
+                            </ul>
+                            <button onclick="setView('about')" class="inline-flex items-center justify-center px-6 py-3 font-medium transition-all duration-300 rounded-xl bg-transparent border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-zinc-950 dark:hover:text-zinc-950">Discover Our Story</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Process -->
+            <section class="py-20 dark:bg-zinc-950 bg-zinc-50 border-y dark:border-zinc-900 border-zinc-200 transition-colors duration-300">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="mb-12 text-center">
+                        <span class="text-amber-500 font-bold tracking-widest uppercase text-sm mb-3 block">How It Works</span>
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold dark:text-white text-zinc-900 mb-4 transition-colors">Our Detailing Process</h2>
+                        <div class="h-1 w-20 bg-amber-500 mx-auto"></div>
+                    </div>
+                    <div id="home-process-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gallery Carousel -->
+            <section class="py-20 dark:bg-zinc-950 bg-zinc-50 transition-colors duration-300">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between items-end mb-12">
+                        <div class="text-left">
+                            <span class="text-amber-500 font-bold tracking-widest uppercase text-sm mb-3 block">Our Portfolio</span>
+                            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold dark:text-white text-zinc-900 mb-4 transition-colors">Recent Transformations</h2>
+                            <div class="h-1 w-20 bg-amber-500"></div>
+                        </div>
+                        <div class="hidden md:flex gap-4 pb-4">
+                            <button onclick="prevImage()" class="w-12 h-12 rounded-full border dark:border-zinc-700 border-zinc-300 flex items-center justify-center dark:text-white text-zinc-900 hover:bg-amber-500 hover:text-white transition-all"><i data-lucide="chevron-left" class="w-6 h-6"></i></button>
+                            <button onclick="nextImage()" class="w-12 h-12 rounded-full border dark:border-zinc-700 border-zinc-300 flex items-center justify-center dark:text-white text-zinc-900 hover:bg-amber-500 hover:text-white transition-all"><i data-lucide="chevron-right" class="w-6 h-6"></i></button>
+                        </div>
+                    </div>
+                    <div class="relative overflow-hidden rounded-2xl group">
+                        <div id="carousel-track" class="flex transition-transform duration-500 ease-in-out">
+                            <!-- Filled by JS -->
+                        </div>
+                        <div class="flex md:hidden justify-between absolute top-1/2 -translate-y-1/2 w-full px-4 pointer-events-none">
+                            <button onclick="prevImage()" class="w-10 h-10 rounded-full bg-zinc-950/50 backdrop-blur-sm flex items-center justify-center text-white pointer-events-auto"><i data-lucide="chevron-left" class="w-6 h-6"></i></button>
+                            <button onclick="nextImage()" class="w-10 h-10 rounded-full bg-zinc-950/50 backdrop-blur-sm flex items-center justify-center text-white pointer-events-auto"><i data-lucide="chevron-right" class="w-6 h-6"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testimonials -->
+            <section class="py-20 dark:bg-zinc-900 bg-white transition-colors duration-300">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="mb-12 text-center">
+                        <span class="text-amber-500 font-bold tracking-widest uppercase text-sm mb-3 block">Client Reviews</span>
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold dark:text-white text-zinc-900 mb-4 transition-colors">What Our Customers Say</h2>
+                        <div class="h-1 w-20 bg-amber-500 mx-auto"></div>
+                    </div>
+                    <div id="home-testimonials-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQs -->
+            <section class="py-20 dark:bg-zinc-950 bg-zinc-50 border-t dark:border-zinc-900 border-zinc-200 transition-colors duration-300">
+                <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="mb-12 text-center">
+                        <span class="text-amber-500 font-bold tracking-widest uppercase text-sm mb-3 block">Questions & Answers</span>
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold dark:text-white text-zinc-900 mb-4 transition-colors">Frequently Asked Questions</h2>
+                        <div class="h-1 w-20 bg-amber-500 mx-auto"></div>
+                    </div>
+                    <div id="home-faqs-container" class="space-y-4">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <section class="py-24 relative overflow-hidden">
+                <div class="absolute inset-0">
+                    <img src="https://i.ibb.co/F4RTGCzP/CTA-Background.webp" alt="CTA Background" class="w-full h-full object-cover"/>
+                    <div class="absolute inset-0 bg-zinc-950/80"></div>
+                </div>
+                <div class="max-w-4xl mx-auto px-4 relative z-10 text-center">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Ready to Give Your Car the Care It Deserves?</h2>
+                    <p class="text-xl text-zinc-300 mb-10">Book your premium detailing session today and experience the ultimate automotive transformation in Qatar.</p>
+                    <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                        <button onclick="setView('contact')" class="inline-flex items-center justify-center px-8 py-4 font-medium transition-all duration-300 rounded-xl bg-amber-500 text-zinc-950 hover:bg-amber-400 text-lg">Book Your Appointment</button>
+                        <button class="inline-flex items-center justify-center px-8 py-4 font-medium transition-all duration-300 rounded-xl bg-emerald-600 text-white hover:bg-emerald-500 text-lg">
+                            <i data-lucide="message-circle" class="mr-2 w-6 h-6"></i> WhatsApp Us Now
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+        <!-- ABOUT PAGE -->
+        <div id="view-about" class="page-view hidden animate-fade-in pt-24 pb-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold dark:text-white text-zinc-900 mb-6 transition-colors">About <span class="text-amber-500 biz-name"></span></h1>
+                    <p class="text-xl dark:text-zinc-400 text-zinc-500 max-w-3xl mx-auto transition-colors">Qatar's premier destination for luxury automotive care, paint protection, and professional detailing.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-24">
+                    <div>
+                        <img src="https://i.ibb.co/zTKKg7rq/Why-Choose-Us.webp" alt="About Us Detailing" class="w-full rounded-2xl shadow-2xl border dark:border-zinc-800 border-zinc-200 transition-colors"/>
+                    </div>
+                    <div>
+                        <div class="mb-12 text-left">
+                            <span class="text-amber-500 font-bold tracking-widest uppercase text-sm mb-3 block">Our Expertise</span>
+                            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold dark:text-white text-zinc-900 mb-4 transition-colors">Passionate About Perfection</h2>
+                            <div class="h-1 w-20 bg-amber-500"></div>
+                        </div>
+                        <p class="dark:text-zinc-300 text-zinc-600 mb-6 text-lg leading-relaxed transition-colors">
+                            Founded with a passion for automotive excellence, <span class="biz-name"></span> has grown into Qatar's most trusted name for high-end vehicle detailing and protection. We understand that your vehicle is more than just transportation; it's a statement, an investment, and a passion.
+                        </p>
+                        <p class="dark:text-zinc-300 text-zinc-600 mb-8 text-lg leading-relaxed transition-colors">
+                            Our state-of-the-art facility is equipped with the latest technology, lighting, and climate control to ensure flawless results. Every member of our team is a certified technician, rigorously trained in the art and science of paint correction, ceramic coating, and PPF installation.
+                        </p>
+                        
+                    </div>
+                </div>
+                <div>
+                    <div class="grid grid-cols-2 gap-6">
+                            <div class="dark:bg-zinc-900 bg-white p-6 border dark:border-zinc-800 border-zinc-200 rounded-2xl shadow-sm transition-colors"><h4 class="text-4xl font-bold text-amber-500 mb-2">5+</h4><p class="dark:text-white text-zinc-900 font-medium transition-colors">Years Experience</p></div>
+                            <div class="dark:bg-zinc-900 bg-white p-6 border dark:border-zinc-800 border-zinc-200 rounded-2xl shadow-sm transition-colors"><h4 class="text-4xl font-bold text-amber-500 mb-2">2k+</h4><p class="dark:text-white text-zinc-900 font-medium transition-colors">Cars Detailed</p></div>
+                            <div class="dark:bg-zinc-900 bg-white p-6 border dark:border-zinc-800 border-zinc-200 rounded-2xl shadow-sm transition-colors"><h4 class="text-4xl font-bold text-amber-500 mb-2">100%</h4><p class="dark:text-white text-zinc-900 font-medium transition-colors">Satisfaction</p></div>
+                            <div class="dark:bg-zinc-900 bg-white p-6 border dark:border-zinc-800 border-zinc-200 rounded-2xl shadow-sm transition-colors"><h4 class="text-4xl font-bold text-amber-500 mb-2">Top</h4><p class="dark:text-white text-zinc-900 font-medium transition-colors">Tier Products</p></div>
+                        </div>
+                </div>
+                <div class="mb-12 border-t dark:border-zinc-900 border-zinc-200 pt-20 transition-colors">
+                    <div class="mb-12 text-center">
+                        <span class="text-amber-500 font-bold tracking-widest uppercase text-sm mb-3 block">What We Do</span>
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold dark:text-white text-zinc-900 mb-4 transition-colors">Our Core Services</h2>
+                        <div class="h-1 w-20 bg-amber-500 mx-auto"></div>
+                    </div>
+                    <div id="about-services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Filled by JS -->
+                    </div>
+                    <div class="text-center mt-12">
+                        <button onclick="setView('services')" class="inline-flex items-center justify-center px-6 py-3 font-medium transition-all duration-300 rounded-xl bg-transparent border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-zinc-950 dark:hover:text-zinc-950">Explore Full Service Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SERVICES PAGE -->
+        <div id="view-services" class="page-view hidden animate-fade-in pt-24 pb-20">
+            <div class="dark:bg-zinc-900 bg-white py-16 mb-16 border-b dark:border-zinc-800 border-zinc-200 transition-colors duration-300">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold dark:text-white text-zinc-900 mb-6 transition-colors">Our Services</h1>
+                    <p class="text-xl dark:text-zinc-400 text-zinc-500 max-w-3xl mx-auto transition-colors">Comprehensive detailing solutions tailored to protect and enhance your vehicle.</p>
+                </div>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div id="services-page-container" class="space-y-20">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+        </div>
+
+
+        <!-- GALLERY PAGE -->
+        <div id="view-gallery" class="page-view hidden animate-fade-in pt-24 pb-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h1 class="text-4xl md:text-5xl font-bold dark:text-white text-zinc-900 mb-6 transition-colors">Work Gallery</h1>
+                    <p class="text-xl dark:text-zinc-400 text-zinc-500 max-w-2xl mx-auto transition-colors">A showcase of our dedication to automotive perfection. Before and afters, coatings, and supreme interiors.</p>
+                </div>
+                <div id="gallery-page-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Filled by JS -->
+                </div>
+                <div class="mt-16 text-center">
+                    <p class="dark:text-zinc-400 text-zinc-500 mb-6 transition-colors">Follow us on Instagram for daily updates and transformations.</p>
+                    <button class="inline-flex items-center justify-center px-6 py-3 font-medium transition-all duration-300 rounded-xl bg-transparent border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-zinc-950 dark:hover:text-zinc-950">
+                        <i data-lucide="instagram" class="w-5 h-5 mr-2"></i> @YourBusinessName
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- CONTACT PAGE -->
+        <div id="view-contact" class="page-view hidden animate-fade-in pt-24 pb-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h1 class="text-4xl md:text-5xl font-bold dark:text-white text-zinc-900 mb-6 transition-colors">Contact Us</h1>
+                    <p class="text-xl dark:text-zinc-400 text-zinc-500 max-w-2xl mx-auto transition-colors">Ready to book or have a question? Reach out to our team today.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div class="space-y-8">
+                        <div class="dark:bg-zinc-900 bg-white border dark:border-zinc-800 border-zinc-200 p-8 rounded-2xl shadow-sm transition-colors">
+                            <h3 class="text-2xl font-bold dark:text-white text-zinc-900 mb-6 transition-colors">Get In Touch</h3>
+                            <div class="space-y-6">
+                                <div class="flex items-start">
+                                    <div class="w-12 h-12 dark:bg-zinc-950 bg-zinc-50 border dark:border-zinc-800 border-zinc-200 rounded-full flex items-center justify-center text-amber-500 mr-4 shrink-0 transition-colors"><i data-lucide="phone" class="w-5 h-5"></i></div>
+                                    <div><h4 class="dark:text-white text-zinc-900 font-bold mb-1 transition-colors">Phone</h4><p class="dark:text-zinc-400 text-zinc-500 transition-colors biz-phone"></p></div>
+                                </div>
+                                <!-- <div class="flex items-start">
+                                    <div class="w-12 h-12 dark:bg-zinc-950 bg-zinc-50 border dark:border-zinc-800 border-zinc-200 rounded-full flex items-center justify-center text-emerald-500 mr-4 shrink-0 transition-colors"><i data-lucide="message-circle" class="w-5 h-5"></i></div>
+                                    <div><h4 class="dark:text-white text-zinc-900 font-bold mb-1 transition-colors">WhatsApp</h4><p class="dark:text-zinc-400 text-zinc-500 transition-colors biz-whatsapp"></p><a href="#" class="text-emerald-500 text-sm hover:underline mt-1 inline-block">Click to chat</a></div>
+                                </div> -->
+                                <div class="flex items-start">
+                                    <div class="w-12 h-12 dark:bg-zinc-950 bg-zinc-50 border dark:border-zinc-800 border-zinc-200 rounded-full flex items-center justify-center text-amber-500 mr-4 shrink-0 transition-colors"><i data-lucide="map-pin" class="w-5 h-5"></i></div>
+                                    <div><h4 class="dark:text-white text-zinc-900 font-bold mb-1 transition-colors">Location</h4><p class="dark:text-zinc-400 text-zinc-500 transition-colors biz-location"></p></div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="w-12 h-12 dark:bg-zinc-950 bg-zinc-50 border dark:border-zinc-800 border-zinc-200 rounded-full flex items-center justify-center text-amber-500 mr-4 shrink-0 transition-colors"><i data-lucide="clock" class="w-5 h-5"></i></div>
+                                    <div><h4 class="dark:text-white text-zinc-900 font-bold mb-1 transition-colors">Business Hours</h4><p class="dark:text-zinc-400 text-zinc-500 whitespace-pre-line transition-colors biz-hours"></p></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dark:bg-zinc-900 bg-white border dark:border-zinc-800 border-zinc-200 p-8 rounded-2xl shadow-sm transition-colors">
+                            <h3 class="text-2xl font-bold dark:text-white text-zinc-900 mb-6 transition-colors">Quick Inquiry</h3>
+                            <form class="space-y-4" onsubmit="event.preventDefault()">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div><label class="block dark:text-zinc-400 text-zinc-500 text-sm mb-2 transition-colors">First Name</label><input type="text" class="w-full dark:bg-zinc-950 bg-zinc-50 border dark:border-zinc-800 border-zinc-200 dark:text-white text-zinc-900 px-4 py-3 focus:outline-none focus:border-amber-500 transition-colors rounded-xl" placeholder="John" /></div>
+                                    <div><label class="block dark:text-zinc-400 text-zinc-500 text-sm mb-2 transition-colors">Last Name</label><input type="text" class="w-full dark:bg-zinc-950 bg-zinc-50 border dark:border-zinc-800 border-zinc-200 dark:text-white text-zinc-900 px-4 py-3 focus:outline-none focus:border-amber-500 transition-colors rounded-xl" placeholder="Doe" /></div>
+                                </div>
+                                <div><label class="block dark:text-zinc-400 text-zinc-500 text-sm mb-2 transition-colors">Phone / WhatsApp</label><input type="tel" class="w-full dark:bg-zinc-950 bg-zinc-50 border dark:border-zinc-800 border-zinc-200 dark:text-white text-zinc-900 px-4 py-3 focus:outline-none focus:border-amber-500 transition-colors rounded-xl" placeholder="+974 XXXX XXXX" /></div>
+                                <div>
+                                    <label class="block dark:text-zinc-400 text-zinc-500 text-sm mb-2 transition-colors">Service Required</label>
+                                    <select id="contact-service-select" class="w-full dark:bg-zinc-950 bg-zinc-50 border dark:border-zinc-800 border-zinc-200 dark:text-white text-zinc-900 px-4 py-3 focus:outline-none focus:border-amber-500 transition-colors rounded-xl appearance-none">
+                                        <option>Select a service...</option>
+                                    </select>
+                                </div>
+                                <div><label class="block dark:text-zinc-400 text-zinc-500 text-sm mb-2 transition-colors">Message</label><textarea rows="4" class="w-full dark:bg-zinc-950 bg-zinc-50 border dark:border-zinc-800 border-zinc-200 dark:text-white text-zinc-900 px-4 py-3 focus:outline-none focus:border-amber-500 transition-colors rounded-xl" placeholder="Tell us about your car..."></textarea></div>
+                                <button class="w-full mt-4 inline-flex items-center justify-center px-6 py-3 font-medium transition-all duration-300 rounded-xl bg-amber-500 text-zinc-950 hover:bg-amber-400">Send Message</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Map Placeholder -->
+                    <div class="dark:bg-zinc-900 bg-white border dark:border-zinc-800 border-zinc-200 p-2 rounded-2xl h-full min-h-[400px] shadow-sm transition-colors">
+                        <div class="w-full h-full dark:bg-zinc-800 bg-zinc-200 relative flex items-center justify-center group overflow-hidden transition-colors rounded-xl">
+                            <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=1000" alt="Map Background" class="absolute inset-0 w-full h-full object-cover opacity-30 grayscale group-hover:grayscale-0 transition-all duration-500"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="dark:bg-zinc-950 bg-zinc-50 border-t dark:border-zinc-900 border-zinc-200 pt-20 pb-10 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                <div>
+                    <div class="flex items-center mb-6">
+                        <i data-lucide="shield" class="w-8 h-8 text-amber-500 mr-2"></i>
+                        <span class="text-xl font-black tracking-wider uppercase dark:text-white text-zinc-900 transition-colors biz-name"></span>
+                    </div>
+                    <p class="dark:text-zinc-400 text-zinc-500 mb-6 line-clamp-3 transition-colors">Qatar's premier luxury car detailing studio. We specialize in paint correction, ceramic coatings, PPF, and restorative detailing for those who demand perfection.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full dark:bg-zinc-900 bg-white shadow-sm flex items-center justify-center dark:text-zinc-400 text-zinc-500 hover:bg-amber-500 hover:text-zinc-950 dark:hover:bg-amber-500 dark:hover:text-zinc-950 transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full dark:bg-zinc-900 bg-white shadow-sm flex items-center justify-center dark:text-zinc-400 text-zinc-500 hover:bg-amber-500 hover:text-zinc-950 dark:hover:bg-amber-500 dark:hover:text-zinc-950 transition-colors"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full dark:bg-zinc-900 bg-white shadow-sm flex items-center justify-center dark:text-zinc-400 text-zinc-500 hover:bg-amber-500 hover:text-zinc-950 dark:hover:bg-amber-500 dark:hover:text-zinc-950 transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold dark:text-white text-zinc-900 mb-6 uppercase tracking-wider transition-colors">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><button onclick="setView('home')" class="dark:text-zinc-400 text-zinc-500 hover:text-amber-500 dark:hover:text-amber-500 transition-colors flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 mr-2"></i> Home</button></li>
+                        <li><button onclick="setView('about')" class="dark:text-zinc-400 text-zinc-500 hover:text-amber-500 dark:hover:text-amber-500 transition-colors flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 mr-2"></i> About Us</button></li>
+                        <li><button onclick="setView('services')" class="dark:text-zinc-400 text-zinc-500 hover:text-amber-500 dark:hover:text-amber-500 transition-colors flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 mr-2"></i> Services</button></li>
+                        <li><button onclick="setView('gallery')" class="dark:text-zinc-400 text-zinc-500 hover:text-amber-500 dark:hover:text-amber-500 transition-colors flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 mr-2"></i> Gallery</button></li>
+                        <li><button onclick="setView('contact')" class="dark:text-zinc-400 text-zinc-500 hover:text-amber-500 dark:hover:text-amber-500 transition-colors flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 mr-2"></i> Contact</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold dark:text-white text-zinc-900 mb-6 uppercase tracking-wider transition-colors">Services</h4>
+                    <ul id="footer-services-list" class="space-y-3">
+                        <!-- Filled by JS -->
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold dark:text-white text-zinc-900 mb-6 uppercase tracking-wider transition-colors">Contact Info</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-start"><i data-lucide="map-pin" class="w-5 h-5 text-amber-500 mr-3 shrink-0 mt-0.5"></i><span class="dark:text-zinc-400 text-zinc-500 transition-colors biz-location"></span></li>
+                        <li class="flex items-center"><i data-lucide="phone" class="w-5 h-5 text-amber-500 mr-3 shrink-0"></i><span class="dark:text-zinc-400 text-zinc-500 transition-colors biz-phone"></span></li>
+                        <li class="flex items-center"><i data-lucide="message-circle" class="w-5 h-5 text-amber-500 mr-3 shrink-0"></i><span class="dark:text-zinc-400 text-zinc-500 transition-colors biz-whatsapp"></span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t dark:border-zinc-900 border-zinc-200 pt-8 flex flex-col md:flex-row justify-between items-center text-sm dark:text-zinc-500 text-zinc-400 transition-colors">
+                <p>&copy; <span id="current-year"></span> <span class="biz-name"></span>. All rights reserved.</p>
+                <div class="flex space-x-4 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-amber-500 transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-amber-500 transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LOGIC SCRIPTS -->
+    <script>
+        // --- DATA ---
+        const BUSINESS_INFO = {
+            name: "[Your Business Name]",
+            phone: "[Phone Number]",
+            whatsapp: "[WhatsApp Number]",
+            location: "[Location, Qatar]",
+            hours: "Sat - Thu: 9:00 AM - 9:00 PM \n Fri: 2:00 PM - 9:00 PM"
+        };
+
+        const SERVICES = [
+            { id: 'exterior', icon: 'car', title: "Exterior Car Detailing", description: "Complete hand wash, clay bar treatment, and decontamination to restore your car's exterior shine.", image: "https://i.ibb.co/pHnR8w4/Car-Polishing-Paint-Correction.webp" },
+            { id: 'interior', icon: 'sparkles', title: "Interior Deep Cleaning", description: "Thorough vacuuming, steam cleaning, leather conditioning, and odor removal for a pristine cabin.", image: "https://i.ibb.co/gLvJj8MH/Interior-Deep-Cleaning.webp" },
+            { id: 'ceramic', icon: 'shield', title: "Ceramic Coating", description: "Long-lasting nano-ceramic protection against UV rays, chemicals, and minor scratches with an extreme gloss finish.", image: "https://i.ibb.co/8Db3FS84/Ceramic-Coating.webp" },
+            { id: 'ppf', icon: 'award', title: "Paint Protection Film (PPF)", description: "Invisible, self-healing urethane film applied to high-impact areas to prevent rock chips and road debris damage.", image: "https://i.ibb.co/DPtvvr3q/Paint-Protection-Film.webp" },
+            { id: 'engine', icon: 'settings', title: "Engine Bay Cleaning", description: "Safe degreasing and dressing of engine components to keep your engine bay looking brand new and running cool.", image: "https://i.ibb.co/SDR33C4H/Exterior-Car-Detailing.webp" },
+            { id: 'polishing', icon: 'wrench', title: "Car Polishing & Paint Correction", description: "Multi-stage machine compounding and polishing to permanently remove swirl marks, scratches, and oxidation.", image: "https://i.ibb.co/pHnR8w4/Car-Polishing-Paint-Correction.webp" }
+        ];
+
+        const PROCESS_STEPS = [
+            { icon: 'search', title: "1. Vehicle Inspection", description: "We thoroughly assess your vehicle's condition to determine the best treatments." },
+            { icon: 'droplets', title: "2. Deep Cleaning", description: "Comprehensive wash, decontamination, and prep work to ensure a flawless canvas." },
+            { icon: 'sparkles', title: "3. Protection / Polishing", description: "Applying chosen treatments like paint correction, PPF, or ceramic coatings." },
+            { icon: 'check-circle', title: "4. Final Quality Check", description: "Meticulous final inspection under specialized lighting before handover." }
+        ];
+
+        const GALLERY_IMAGES = [
+            "https://i.ibb.co/PZ0GXD61/1.webp",
+            "https://i.ibb.co/jP6zz387/2.webp",
+            "https://i.ibb.co/dsYzCJTG/3.webp",
+            "https://i.ibb.co/0RjPdd23/4.webp",
+            "https://i.ibb.co/qLd2yDwS/5.webp",
+            "https://i.ibb.co/n8gqzX8x/6.webp",
+            "https://i.ibb.co/Q763D1Tj/7.webp",
+            "https://i.ibb.co/FbvCybj6/8.webp"
+        ];
+
+        const TESTIMONIALS = [
+            { name: "Ahmed R.", rating: 5, text: "The ceramic coating completely transformed my Land Cruiser. The shine is unbelievable, and the water just beads right off. Highly professional team in Qatar." },
+            { name: "Khalid M.", rating: 5, text: "I brought in my Porsche for paint correction and PPF. Their attention to detail is unmatched. It looks better than the day I drove it out of the showroom." },
+            { name: "Sarah A.", rating: 5, text: "The interior deep cleaning service is fantastic. They managed to remove stains I thought were permanent. The car smells and feels brand new again. Thank you!" }
+        ];
+
+        const FAQS = [
+            { question: "How often should I get car detailing?", answer: "We recommend a full detailing service every 4 to 6 months. However, basic maintenance washes should be done every 2 weeks to keep your vehicle in optimal condition, especially with Qatar's dusty environment." },
+            { question: "How long does ceramic coating last?", answer: "Depending on the package you choose and how well you maintain it, our premium ceramic coatings can last anywhere from 2 to 5 years. We provide specific aftercare instructions to maximize its lifespan." },
+            { question: "Do you offer interior deep cleaning?", answer: "Yes, our interior deep cleaning includes comprehensive vacuuming, steam cleaning of upholstery and carpets, leather conditioning, and full odor neutralization." },
+            { question: "Is paint protection film (PPF) worth it?", answer: "Absolutely. PPF is the ultimate defense against rock chips, sandstorms, bird droppings, and minor scratches. It preserves your original paint and maintains your vehicle's resale value." },
+            { question: "How long does a full detailing service take?", answer: "A standard full detailing takes about 4 to 6 hours. More intensive services like paint correction, ceramic coating, or PPF installation can take 1 to 3 days depending on the vehicle's condition." }
+        ];
+
+        // --- STATE & UTILS ---
+        let currentView = 'home';
+        let isMobileMenuOpen = false;
+        let currentImageIndex = 0;
+
+        // --- DOM RENDERERS ---
+        function initializeData() {
+            // Apply text data to placeholders
+            const nameParts = BUSINESS_INFO.name.split(' ');
+            document.querySelectorAll('.biz-logo-text').forEach(el => el.innerHTML = `${nameParts[0]} <span class="text-amber-500">${nameParts.slice(1).join(' ')}</span>`);
+            document.querySelectorAll('.biz-name').forEach(el => el.textContent = BUSINESS_INFO.name);
+            document.querySelectorAll('.biz-phone').forEach(el => el.textContent = BUSINESS_INFO.phone);
+            document.querySelectorAll('.biz-whatsapp').forEach(el => el.textContent = BUSINESS_INFO.whatsapp);
+            document.querySelectorAll('.biz-location').forEach(el => el.textContent = BUSINESS_INFO.location);
+            document.querySelectorAll('.biz-hours').forEach(el => el.textContent = BUSINESS_INFO.hours);
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            // Render Services on Home
+            document.getElementById('home-services-grid').innerHTML = SERVICES.map(service => `
+                <div class="group flex flex-col relative dark:bg-zinc-900 bg-white border dark:border-zinc-800 border-zinc-200 hover:border-amber-500/50 dark:hover:border-amber-500/50 transition-all duration-300 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl cursor-pointer" onclick="setView('services')">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="${service.image}" alt="${service.title}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-zinc-950/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300"></div>
+                        <div class="absolute bottom-4 left-6 text-amber-500 drop-shadow-lg"><i data-lucide="${service.icon}" class="w-8 h-8"></i></div>
+                    </div>
+                    <div class="p-8 flex flex-col flex-grow">
+                        <h3 class="text-xl font-bold dark:text-white text-zinc-900 mb-3 transition-colors">${service.title}</h3>
+                        <p class="dark:text-zinc-400 text-zinc-500 mb-6 line-clamp-3 flex-grow transition-colors">${service.description}</p>
+                        <button class="text-amber-500 flex items-center text-sm font-semibold hover:text-amber-400 transition-colors mt-auto w-fit">Read More <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i></button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Services on About (Minimal)
+            document.getElementById('about-services-grid').innerHTML = SERVICES.map(service => `
+                <div onclick="setView('services')" class="dark:bg-zinc-900 bg-white p-6 rounded-2xl border dark:border-zinc-800 border-zinc-200 flex items-start gap-5 hover:border-amber-500/50 dark:hover:border-amber-500/50 transition-colors cursor-pointer group shadow-sm hover:shadow-md">
+                    <div class="text-amber-500 shrink-0 transform group-hover:scale-110 transition-transform"><i data-lucide="${service.icon}" class="w-8 h-8"></i></div>
+                    <div>
+                        <h4 class="text-lg dark:text-white text-zinc-900 font-bold mb-2 transition-colors">${service.title}</h4>
+                        <p class="dark:text-zinc-400 text-zinc-500 text-sm line-clamp-2 transition-colors">${service.description}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Services Page Content
+            document.getElementById('services-page-container').innerHTML = SERVICES.map((service, index) => `
+                <div class="flex flex-col ${index % 2 !== 0 ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-12 items-center">
+                    <div class="lg:w-1/2 w-full">
+                        <div class="relative group overflow-hidden rounded-2xl border dark:border-zinc-800 border-zinc-200 shadow-md">
+                            <img src="${service.image}" alt="${service.title}" class="w-full h-auto aspect-video object-cover transition-transform duration-700 group-hover:scale-105"/>
+                            <div class="absolute inset-0 bg-amber-500/10 mix-blend-overlay"></div>
+                        </div>
+                    </div>
+                    <div class="lg:w-1/2 w-full">
+                        <div class="text-amber-500 mb-4"><i data-lucide="${service.icon}" class="w-8 h-8"></i></div>
+                        <h2 class="text-3xl font-bold dark:text-white text-zinc-900 mb-4 transition-colors">${service.title}</h2>
+                        <p class="dark:text-zinc-300 text-zinc-600 text-lg mb-8 leading-relaxed transition-colors">${service.description} We utilize the best products in the industry to ensure that this service exceeds your expectations, providing durable protection and a flawless finish suitable for the harsh climatic conditions in Qatar.</p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start dark:text-zinc-400 text-zinc-500 transition-colors"><i data-lucide="check-circle" class="w-5 h-5 text-amber-500 mr-3 mt-0.5 shrink-0"></i>Premium materials and tools used exclusively.</li>
+                            <li class="flex items-start dark:text-zinc-400 text-zinc-500 transition-colors"><i data-lucide="check-circle" class="w-5 h-5 text-amber-500 mr-3 mt-0.5 shrink-0"></i>Performed by certified automotive technicians.</li>
+                            <li class="flex items-start dark:text-zinc-400 text-zinc-500 transition-colors"><i data-lucide="check-circle" class="w-5 h-5 text-amber-500 mr-3 mt-0.5 shrink-0"></i>Guaranteed satisfaction and long-lasting results.</li>
+                        </ul>
+                        <button onclick="setView('contact')" class="inline-flex items-center justify-center px-6 py-3 font-medium transition-all duration-300 rounded-xl bg-amber-500 text-zinc-950 hover:bg-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.3)]">Book This Service</button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Process
+            document.getElementById('home-process-grid').innerHTML = PROCESS_STEPS.map((step, index) => `
+                <div class="text-center relative">
+                    ${index !== PROCESS_STEPS.length - 1 ? '<div class="hidden lg:block absolute top-10 left-[60%] w-full h-[2px] bg-gradient-to-r from-amber-500/50 to-transparent"></div>' : ''}
+                    <div class="dark:bg-zinc-900 bg-white w-24 h-24 mx-auto rounded-full flex items-center justify-center border dark:border-zinc-800 border-zinc-200 mb-6 relative z-10 shadow-lg transition-colors">
+                        <i data-lucide="${step.icon}" class="w-10 h-10 text-amber-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold dark:text-white text-zinc-900 mb-3 transition-colors">${step.title}</h3>
+                    <p class="dark:text-zinc-400 text-zinc-500 text-sm transition-colors">${step.description}</p>
+                </div>
+            `).join('');
+
+            // Render Gallery Track
+            document.getElementById('carousel-track').innerHTML = GALLERY_IMAGES.map((img, index) => `
+                <div class="w-full flex-shrink-0 relative pt-[50%] md:pt-[50%]">
+                    <img src="${img}" alt="Detailing work ${index + 1}" class="absolute inset-0 w-full h-full object-cover"/>
+                </div>
+            `).join('');
+
+            // Render Gallery Page
+            document.getElementById('gallery-page-grid').innerHTML = GALLERY_IMAGES.map((img, index) => `
+                <div class="group relative aspect-square overflow-hidden dark:bg-zinc-900 bg-zinc-100 rounded-2xl border dark:border-zinc-800 border-zinc-200 transition-colors shadow-sm">
+                    <img src="${img}" alt="Gallery ${index+1}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"/>
+                </div>
+            `).join('');
+
+            // Render Testimonials
+            document.getElementById('home-testimonials-grid').innerHTML = TESTIMONIALS.map(t => `
+                <div class="dark:bg-zinc-950 bg-zinc-50 border dark:border-zinc-800 border-zinc-200 p-8 rounded-2xl relative transition-colors shadow-sm">
+                    <div class="text-amber-500 absolute top-6 right-8 opacity-20">
+                        <svg width="45" height="36" viewBox="0 0 45 36" fill="currentColor"><path d="M13.5 0C6.04416 0 0 6.04416 0 13.5V36H18V13.5H9C9 8.52942 13.5 4.5 13.5 4.5V0ZM40.5 0C33.0442 0 27 6.04416 27 13.5V36H45V13.5H36C36 8.52942 40.5 4.5 40.5 4.5V0Z" /></svg>
+                    </div>
+                    <div class="flex mb-4">${Array(t.rating).fill('<i data-lucide="star" class="w-5 h-5 fill-amber-500 text-amber-500"></i>').join('')}</div>
+                    <p class="dark:text-zinc-300 text-zinc-600 mb-6 italic transition-colors">"${t.text}"</p>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 dark:bg-zinc-800 bg-zinc-200 rounded-full flex items-center justify-center dark:text-white text-zinc-900 font-bold mr-4 transition-colors">${t.name.charAt(0)}</div>
+                        <div><h4 class="dark:text-white text-zinc-900 font-bold transition-colors">${t.name}</h4><span class="dark:text-zinc-500 text-zinc-400 text-sm transition-colors">Verified Customer</span></div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render FAQs
+            document.getElementById('home-faqs-container').innerHTML = FAQS.map((faq, index) => `
+                <div class="border dark:border-zinc-800 border-zinc-200 rounded-2xl overflow-hidden transition-colors">
+                    <button onclick="toggleFaq(${index})" class="w-full text-left px-6 py-4 dark:bg-zinc-900 bg-white dark:hover:bg-zinc-800 hover:bg-zinc-100 transition-colors flex justify-between items-center">
+                        <span class="font-bold dark:text-white text-zinc-900 pr-4 transition-colors">${faq.question}</span>
+                        <i id="faq-icon-${index}" data-lucide="chevron-right" class="w-5 h-5 text-amber-500 transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-content-${index}" class="faq-content overflow-hidden" style="max-height: 0px;">
+                        <div class="p-6 dark:bg-zinc-950 bg-zinc-50 dark:text-zinc-400 text-zinc-500 transition-colors">${faq.answer}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Fill Select Dropdowns & Footer Lists
+            const options = SERVICES.map(s => `<option>${s.title}</option>`).join('');
+            document.getElementById('contact-service-select').innerHTML += options;
+            
+            document.getElementById('footer-services-list').innerHTML = SERVICES.slice(0, 5).map(s => `
+                <li><button onclick="setView('services')" class="dark:text-zinc-400 text-zinc-500 hover:text-amber-500 dark:hover:text-amber-500 transition-colors flex items-center text-left"><i data-lucide="chevron-right" class="w-4 h-4 mr-2 shrink-0"></i> ${s.title}</button></li>
+            `).join('');
+        }
+
+        // --- INTERACTIVITY FUNCTIONS ---
+
+        function setView(viewId) {
+            currentView = viewId;
+            document.querySelectorAll('.page-view').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`view-${viewId}`).classList.remove('hidden');
+            window.scrollTo(0, 0);
+            updateNavUI();
+            closeMobileMenu();
+            // Re-init icons to ensure dynamic ones load
+            lucide.createIcons();
+        }
+
+        function updateNavUI() {
+            const nav = document.getElementById('main-nav');
+            const logoText = document.getElementById('logo-text');
+            const isSolid = window.scrollY > 50 || currentView !== 'home';
+            
+            // Nav Bar background
+            if (isSolid) {
+                nav.className = "fixed w-full z-50 transition-all duration-300 dark:bg-zinc-950/90 bg-white/95 backdrop-blur-md border-b dark:border-zinc-800 border-zinc-200 py-3 shadow-sm";
+                logoText.classList.replace('text-white', 'text-zinc-900');
+                logoText.classList.add('dark:text-white');
+            } else {
+                nav.className = "fixed w-full z-50 transition-all duration-300 bg-transparent py-5";
+                logoText.classList.remove('dark:text-white', 'text-zinc-900');
+                logoText.classList.add('text-white');
+            }
+
+            // Update Desktop Links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                const isTarget = link.getAttribute('data-target') === currentView;
+                link.className = `nav-link text-sm font-semibold uppercase tracking-wider transition-colors hover:text-amber-500 cursor-pointer ${
+                    isTarget ? 'text-amber-500' : isSolid ? 'dark:text-zinc-300 text-zinc-600' : 'text-zinc-200'
+                }`;
+            });
+            
+            // Update Mobile Links
+            document.querySelectorAll('.nav-link-mobile').forEach(link => {
+                const isTarget = link.getAttribute('data-target') === currentView;
+                link.className = `nav-link-mobile text-left text-lg font-bold uppercase tracking-wider py-2 transition-colors ${
+                    isTarget ? 'text-amber-500' : 'dark:text-zinc-300 text-zinc-600'
+                }`;
+            });
+
+            // Update Icon Colors
+            document.querySelectorAll('.nav-icon-btn').forEach(btn => {
+                btn.className = `nav-icon-btn p-2 rounded-full transition-colors ${
+                    isSolid ? 'dark:text-zinc-300 text-zinc-600 hover:text-amber-500' : 'text-zinc-200 hover:text-amber-500'
+                }`;
+            });
+
+            document.getElementById('mobile-menu-btn').className = `transition-colors hover:text-amber-500 ${isSolid ? 'dark:text-white text-zinc-900' : 'text-white'}`;
+        }
+
+        function toggleMobileMenu() {
+            isMobileMenuOpen = !isMobileMenuOpen;
+            const menu = document.getElementById('mobile-menu');
+            const iconContainer = document.getElementById('mobile-menu-icon');
+            
+            if (isMobileMenuOpen) {
+                menu.classList.remove('hidden');
+                iconContainer.innerHTML = '<i data-lucide="x" class="w-8 h-8"></i>';
+            } else {
+                menu.classList.add('hidden');
+                iconContainer.innerHTML = '<i data-lucide="menu" class="w-8 h-8"></i>';
+            }
+            lucide.createIcons();
+        }
+
+        function closeMobileMenu() {
+            if (isMobileMenuOpen) toggleMobileMenu();
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            const isDark = html.classList.contains('dark');
+            
+            document.querySelectorAll('.theme-icon-sun').forEach(el => el.classList.toggle('hidden', !isDark));
+            document.querySelectorAll('.theme-icon-moon').forEach(el => el.classList.toggle('hidden', isDark));
+        }
+
+        // Carousel Controls
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % GALLERY_IMAGES.length;
+            document.getElementById('carousel-track').style.transform = `translateX(-${currentImageIndex * 100}%)`;
+        }
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length;
+            document.getElementById('carousel-track').style.transform = `translateX(-${currentImageIndex * 100}%)`;
+        }
+
+        // FAQ Toggle
+        function toggleFaq(index) {
+            const content = document.getElementById(`faq-content-${index}`);
+            const icon = document.getElementById(`faq-icon-${index}`);
+            
+            if (content.style.maxHeight === '0px' || !content.style.maxHeight) {
+                content.style.maxHeight = content.scrollHeight + 'px';
+                icon.classList.add('rotate-90');
+            } else {
+                content.style.maxHeight = '0px';
+                icon.classList.remove('rotate-90');
+            }
+        }
+
+        // --- LIFECYCLE ---
+        window.addEventListener('scroll', updateNavUI);
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initializeData();
+            setView('home'); // Sets the initial UI state
+            
+            // Set initial theme icon based on class
+            const isDark = document.documentElement.classList.contains('dark');
+            document.querySelectorAll('.theme-icon-sun').forEach(el => el.classList.toggle('hidden', !isDark));
+            document.querySelectorAll('.theme-icon-moon').forEach(el => el.classList.toggle('hidden', isDark));
+        });
+
+    </script>
+</body>
+</html>
